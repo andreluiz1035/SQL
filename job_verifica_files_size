@@ -1,0 +1,20 @@
+
+
+
+EXEC msdb.dbo.sp_send_dbmail  
+    @profile_name = 'O365',  
+    @recipients = 'andre.souza@vennecy.com.br',  
+    @body = 'Tamanho dos arquivos',  
+    @subject = 'Tamanho dos arquivos' , 	
+	@query = '
+use AdventureWorks2017
+go
+
+SELECT DB_NAME(database_id) AS DBName,
+Name AS Logical_Name,Physical_Name,(size*8)/1024 SizeMB
+FROM sys.master_files;',
+	    @attach_query_result_as_file = 1,
+		@query_attachment_filename   = 'TamanhoDosArquivos.csv',
+        @query_result_separator      = ',',
+		@query_result_no_padding = 1
+
