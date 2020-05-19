@@ -1,0 +1,26 @@
+
+EXEC msdb.dbo.sp_send_dbmail  
+    @profile_name = 'O365',  
+    @recipients = 'andre.souza@vennecy.com.br',  
+    @body = 'Conexoes',  
+    @subject = 'Conexoes' , 	
+	@query = '
+use AdventureWorks2017
+go
+
+SELECT 
+    DB_NAME(dbid) as DBName, 
+    COUNT(dbid) as NumberOfConnections,
+    loginame as LoginName
+FROM
+    sys.sysprocesses
+WHERE 
+    dbid > 0
+GROUP BY 
+    dbid, loginame;',
+	    @attach_query_result_as_file = 1,
+		@query_attachment_filename   = 'Conexoes.csv',
+        @query_result_separator      = ',',
+		@query_result_no_padding = 1
+
+
